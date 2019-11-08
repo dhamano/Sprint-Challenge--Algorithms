@@ -92,11 +92,89 @@ class SortingRobot:
         """
         return self._light == "ON"
 
+    def check_right(self):
+        print(f'check right {robot._list}')
+        if(self.can_move_right()):
+            self.move_right()
+            if(self.compare_item() == 0):
+                print("RIGHT: item held same value")
+                self.check_right()
+            elif(self.compare_item() == 1):
+                print("RIGHT: item held greater")
+                self.swap_item()
+                self.check_left()
+            elif(self.compare_item() == -1):
+                print("RIGHT: item held less")
+                if(self.can_move_right()):
+                    print("RIGHT: can move right")
+                    self.move_left()
+                    self.swap_item()
+                    self.move_right()
+                    self.check_right()
+                else:
+                    print("RIGHT: cannot move right")
+                    self.set_light_off()
+                    self.move_left()
+                    self.swap_item()
+                    print(robot._list)
+            elif(self.compare_item() == None):
+                print("RIGHT: held or space empty")
+                if(self.can_move_right()):
+                    self.swap_item()
+                    self.check_right()
+                else:
+                    print(f"at end {robot._list}")
+
+    def check_left(self):
+        print(f'check left {robot._list}')
+        if(self.can_move_left()):
+            self.move_left()
+            if(self.compare_item() == 0):
+                print('LEFT: item held same value')
+                self.check_left()
+            elif(self.compare_item() == 1):
+                print('LEFT: item held greater')
+                self.swap_item()
+                self.check_left()
+            elif(self.compare_item() == -1):
+                print('LEFT: item held less')
+                if(self.can_move_left()):
+                    self.check_left()
+                else:
+                    self.swap_item()
+                    self.check_right()
+            elif(self.compare_item() == None):
+                print('LEFT: none')
+                if(self.can_move_left()):
+                    print('LEFT: can move left');
+                    self.check_left()
+                else:
+                    print('LEFT: cannot move left')
+                    self.swap_item()
+                    self.check_right()
+
     def sort(self):
         """
         Sort the robot's list.
+
+        turn light on
+        compare right to current
+            if right is less swap
+            place item back to right
+            go back to compare right to current
+
+            if held item is less move left and compare
+            if left is less do not swap go back and place
+
+            if held is less go left if cannot go left swap
+            go right
+            compare right
+
+            turn light off once done
         """
-        # Fill this out
+        self.swap_item()
+        self.set_light_on()
+        self.check_right()
         pass
 
 
